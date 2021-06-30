@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class HomeViewController: UIViewController {
     
@@ -65,7 +66,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath)as! MovieCollectionViewCell
         cell.titleLabel.text = moviesArray?[indexPath.row].title
-        cell.backgroundColor = .blue
+        cell.imageView.sd_setImage(with: URL(string: (moviesArray?[indexPath.row].image)!), completed: nil)
         return cell
     }
 
