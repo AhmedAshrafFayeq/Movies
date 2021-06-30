@@ -14,7 +14,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        getMovies()
+    }
+    
+    func getMovies(){
         moviesArray = [Movie]()
         
         let url     = URL(string: "https://api.androidhive.info/json/movies.json")
@@ -44,10 +47,24 @@ class ViewController: UIViewController {
             }catch{
                 print("error \(error)")
             }
-            
         }.resume()
     }
-
-
 }
 
+
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("count \(moviesArray?.count ?? 0)")
+        return moviesArray?.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath)
+        let textLabel = UILabel(frame: CGRect(x: 0, y: 0, width: cell.bounds.width, height: 30))
+        textLabel.text = moviesArray?[indexPath.row].title
+        cell.addSubview(textLabel)
+        cell.backgroundColor = .blue
+        return cell
+    }
+
+}
