@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         getMovies()
         //saveToCoreData()
-        //fetchFromCoreData()
+        fetchFromCoreData()
     }
     
     func getMovies(){
@@ -65,9 +65,9 @@ class HomeViewController: UIViewController {
         let entity      = NSEntityDescription.entity(forEntityName: "Movies", in: context)
         let movie       = NSManagedObject(entity: entity!, insertInto: context)
         
-        movie.setValue("Joker", forKey: "title")
-        movie.setValue(8.5, forKey: "rate")
-        movie.setValue(2018, forKey: "releaseYear")
+        movie.setValue("Iron man", forKey: "title")
+        movie.setValue(7.5, forKey: "rate")
+        movie.setValue(2009, forKey: "releaseYear")
         
         do{
             try context.save()
