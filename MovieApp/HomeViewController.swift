@@ -83,12 +83,14 @@ class HomeViewController: UIViewController {
         let fetchRequest    = NSFetchRequest<NSManagedObject>(entityName: "Movies")
         
         //fetch with conditions -> Predicates
-        let predicate       = NSPredicate(format: "title == %@", "Joker")
+        let predicate       = NSPredicate(format: "title == %@", "Alaadin")
         fetchRequest.predicate  = predicate
         
         do{
             let movies      = try context.fetch(fetchRequest)
-            print(movies[0].value(forKey: "title"))
+            for movie in movies{
+                print("title: \(movie.value(forKey: "title"))")
+            }
         }catch{
             print("error fetching data")
         }
