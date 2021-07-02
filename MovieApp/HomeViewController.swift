@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import CoreData
 
 class HomeViewController: UIViewController {
     
@@ -17,6 +18,8 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         getMovies()
+        //saveToCoreData()
+        //fetchFromCoreData()
     }
     
     func getMovies(){
@@ -38,7 +41,7 @@ class HomeViewController: UIViewController {
                     movieObject.title = rawMovie["title"] as? String
                     movieObject.image = rawMovie["image"] as? String
                     movieObject.rating = rawMovie["rating"] as? Double
-                    movieObject.relaseYear = rawMovie["relaseYear"] as? Int
+                    movieObject.relaseYear = rawMovie["releaseYear"] as? Int
                     
                     self.moviesArray?.append(movieObject)
                 }
@@ -54,6 +57,44 @@ class HomeViewController: UIViewController {
             }
         }.resume()
     }
+    
+    
+    func saveToCoreData(){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context     = appDelegate.persistentContainer.viewContext
+        let entity      = NSEntityDescription.entity(forEntityName: "Movies", in: context)
+        let movie       = NSManagedObject(entity: entity!, insertInto: context)
+        
+        movie.setValue("Joker", forKey: "title")
+        movie.setValue(8.5, forKey: "rate")
+        movie.setValue(2018, forKey: "releaseYear")
+        
+        do{
+            try context.save()
+            print("data saved successfully")
+        }catch{
+            print("error saving")
+        }
+    }
+    
+    func fetchFromCoreData(){
+        let appDelegate     = UIApplication.shared.delegate as! AppDelegate
+        let context         = appDelegate.persistentContainer.viewContext
+        let fetchRequest    = NSFetchRequest<NSManagedObject>(entityName: "Movies")
+        
+        //fetch with conditions -> Predicates
+        let predicate       = NSPredicate(format: "title == %@", "Joker")
+        fetchRequest.predicate  = predicate
+        
+        do{
+            let movies      = try context.fetch(fetchRequest)
+            print(movies[0].value(forKey: "title"))
+        }catch{
+            print("error fetching data")
+        }
+    }
+    
+    
 }
 
 
@@ -70,4 +111,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailsVC = self.storyboard?.instantiateViewController(withIdentifier: "detailsVC") as! DetailsViewController
+        detailsVC.movie = moviesArray?[indexPath.row]
+        self.navigationController?.pushViewController(detailsVC, animated: true)
+    }
 }
