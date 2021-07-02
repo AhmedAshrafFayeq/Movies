@@ -17,9 +17,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        getMovies()
+        //getMovies()
         //saveToCoreData()
         fetchFromCoreData()
+        //deleteFromCoreData()
     }
     
     func getMovies(){
@@ -65,8 +66,8 @@ class HomeViewController: UIViewController {
         let entity      = NSEntityDescription.entity(forEntityName: "Movies", in: context)
         let movie       = NSManagedObject(entity: entity!, insertInto: context)
         
-        movie.setValue("Iron man", forKey: "title")
-        movie.setValue(7.5, forKey: "rate")
+        movie.setValue("Zombie", forKey: "title")
+        movie.setValue(7, forKey: "rate")
         movie.setValue(2009, forKey: "releaseYear")
         
         do{
@@ -83,8 +84,8 @@ class HomeViewController: UIViewController {
         let fetchRequest    = NSFetchRequest<NSManagedObject>(entityName: "Movies")
         
         //fetch with conditions -> Predicates
-        let predicate       = NSPredicate(format: "title == %@", "Alaadin")
-        fetchRequest.predicate  = predicate
+//        let predicate       = NSPredicate(format: "title == %@", "Iron man")
+//        fetchRequest.predicate  = predicate
         
         do{
             let movies      = try context.fetch(fetchRequest)
@@ -96,6 +97,20 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func deleteFromCoreData(){
+        let appDelegate         = UIApplication.shared.delegate as! AppDelegate
+        let context             = appDelegate.persistentContainer.viewContext
+        let fethcRequest        = NSFetchRequest<NSManagedObject>(entityName: "Movies")
+        let predicate           = NSPredicate(format: "title == %@", "Iron man")
+        fethcRequest.predicate  = predicate
+        do{
+            let movies          = try context.fetch(fethcRequest)
+            context.delete(movies[0])
+            try context.save()
+        }catch{
+            print("error deleting")
+        }
+    }
     
 }
 
