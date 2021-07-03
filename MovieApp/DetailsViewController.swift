@@ -24,9 +24,14 @@ class DetailsViewController: UIViewController {
     func setup(){
         imageView.sd_setImage(with: URL(string: (movie?.image)!), completed: nil)
         titleLabel.text     = movie?.title
-        ratingLabel.text    = "\(movie?.rating)"
-        releaseYearLabel.text   = "\(movie?.relaseYear)"
         
+        if let rating = movie?.rating{
+            ratingLabel.text = "\(rating)"
+        }
+        
+        if let releaseYear = movie?.relaseYear{
+            releaseYearLabel.text = "\(releaseYear)"
+        }
     }
     
 
