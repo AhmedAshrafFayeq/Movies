@@ -21,6 +21,7 @@ class HomeViewController: UIViewController {
         //saveToCoreData()
         //fetchFromCoreData()
         //deleteFromCoreData()
+        
     }
     
     func getMovies(){
@@ -31,7 +32,6 @@ class HomeViewController: UIViewController {
         let session = URLSession(configuration: .default)
         
         let _    = session.dataTask(with: request) { (data, response, error) in
-            print(data)
             print("data downloaded successfully")
             
             do {
@@ -51,7 +51,9 @@ class HomeViewController: UIViewController {
                     self.collectionView.reloadData()
                 }
                 for movie in self.moviesArray! {
-                    print(movie.title)
+                    if let movieTitle = movie.title {
+                        print(movieTitle)
+                    }
                 }
             }catch{
                 print("error \(error)")
@@ -90,7 +92,9 @@ class HomeViewController: UIViewController {
         do{
             let movies      = try context.fetch(fetchRequest)
             for movie in movies{
-                print("title: \(movie.value(forKey: "title"))")
+                if let movie = movie.value(forKey: "title") {
+                    print("title: \(movie)")
+                }
             }
         }catch{
             print("error fetching data")
